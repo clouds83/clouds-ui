@@ -1,28 +1,32 @@
-.checkboxLabel {
+.radioLabel {
   display: flex;
   align-items: center;
   width: fit-content;
   cursor: pointer;
 
-  .square {
+  .circle {
     display: flex;
+    align-items: center;
+    justify-content: center;
     border: 1px solid var(--gray-300);
-    border-radius: var(--border-radius-sm);
+    border-radius: var(--border-radius-circle);
     transition: all 100ms linear;
 
-    .checkIcon {
+    .radioIcon {
+      height: 0.5rem;
+      width: 0.5rem;
       opacity: 0;
       transition: all 100ms linear;
       fill: var(--primary-500);
     }
   }
 
-  input[type='checkbox']:checked + .square {
+  input[type='radio']:checked + .circle {
     border-color: var(--primary-500);
     background-color: var(--primary-50);
 
-    .checkIcon {
-      opacity: 100;
+    .radioIcon {
+      opacity: 1;
     }
   }
 
@@ -33,7 +37,7 @@
     line-height: 1;
   }
 
-  &:has(input[type='checkbox']:disabled) {
+  &:has(input[type='radio']:disabled) {
     cursor: not-allowed;
 
     span {
@@ -42,7 +46,7 @@
   }
 
   &.size-sm {
-    .square {
+    .circle {
       width: 0.875rem;
       height: 0.875rem;
     }
@@ -53,7 +57,7 @@
   }
 
   &.size-md {
-    .square {
+    .circle {
       width: 1rem;
       height: 1rem;
     }
@@ -64,10 +68,9 @@
   }
 
   &.size-lg {
-    .square {
+    .circle {
       width: 1.25rem;
       height: 1.25rem;
-      border-radius: var(--border-radius-md);
     }
 
     span {
@@ -76,6 +79,7 @@
     }
   }
 
+  // Label on the left side
   &.labelOnLeft {
     flex-direction: row-reverse;
 
@@ -86,7 +90,7 @@
   }
 }
 
-input[type='checkbox'] {
+input[type='radio'] {
   appearance: none;
   margin: 0;
 }

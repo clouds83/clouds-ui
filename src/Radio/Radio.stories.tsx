@@ -1,15 +1,15 @@
 import type { Meta, StoryObj } from '@storybook/react'
 
-import Checkbox from './Checkbox'
+import Radio from './Radio' // Import the Radio component
 
-const meta: Meta<typeof Checkbox> = {
-  title: 'Components/Checkbox',
-  component: Checkbox,
+const meta: Meta<typeof Radio> = {
+  title: 'Components/Radio',
+  component: Radio,
 }
 
 export default meta
 
-type Story = StoryObj<typeof Checkbox>
+type Story = StoryObj<typeof Radio>
 
 export const Default: Story = {
   args: {},
@@ -17,27 +17,27 @@ export const Default: Story = {
 
 export const WithLabel: Story = {
   args: {
-    label: 'Subscribe to Newsletter',
+    label: 'Option A',
   },
 }
 
 export const Disabled: Story = {
   args: {
-    label: 'Disabled Checkbox',
+    label: 'Disabled Radio',
     disabled: true,
   },
 }
 
 export const CheckedByDefault: Story = {
   args: {
-    label: 'Checked by Default',
+    label: 'Selected by Default',
     defaultChecked: true,
   },
 }
 
 export const LabelOnLeft: Story = {
   args: {
-    label: 'Label on left',
+    label: 'Label on Left',
     labelOnLeft: true,
   },
 }

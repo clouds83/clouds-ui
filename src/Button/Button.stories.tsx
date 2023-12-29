@@ -2,7 +2,7 @@ import React from 'react'
 import type { Meta, StoryObj } from '@storybook/react'
 
 import Button from './Button'
-import Icon from '../Mock/Icon/Icon'
+import Icon from '../_Mock/Icon/Icon'
 
 const meta: Meta<typeof Button> = {
   title: 'Components/Button',
