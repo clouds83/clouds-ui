@@ -1,4 +1,3 @@
-// src/Button/Button.stories.tsx
 import React from 'react'
 import type { Meta, StoryObj } from '@storybook/react'
 
@@ -35,28 +34,35 @@ export const WithIconRight: Story = {
   },
 }
 
+export const Primary: Story = {
+  args: {
+    children: 'Primary',
+    color: 'primary',
+  },
+}
+
 export const Success: Story = {
   args: {
     children: 'Success',
-    success: true,
+    color: 'success',
   },
 }
 
 export const Destructive: Story = {
   args: {
     children: 'Destructive',
-    destructive: true,
+    color: 'destructive',
   },
 }
 
-export const Outline: Story = {
+export const Outlined: Story = {
   args: {
-    children: 'Outline',
-    variant: 'outline',
+    children: 'Outlined',
+    variant: 'outlined',
   },
 }
 
-export const Link: Story = {
+export const LinkStyle: Story = {
   args: {
     children: 'Link',
     variant: 'link',

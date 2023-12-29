@@ -1,20 +1,11 @@
 .checkboxLabel {
-  font-family: var(--font-stack);
-  color: var(--gray-700);
   display: flex;
   align-items: center;
   width: fit-content;
   cursor: pointer;
 
-  input[type='checkbox'] {
-    appearance: none;
-    margin: 0;
-  }
-
   .square {
     display: flex;
-    width: 1rem;
-    height: 1rem;
     border: 1px solid var(--gray-300);
     border-radius: var(--border-radius-sm);
     transition: all 100ms linear;
@@ -29,7 +20,6 @@
   input[type='checkbox']:checked + .square {
     border-color: var(--primary-500);
     background-color: var(--primary-50);
-    transition: all 100ms linear;
 
     .checkIcon {
       opacity: 100;
@@ -37,24 +27,15 @@
   }
 
   span {
+    font-family: var(--font-stack);
+    color: var(--font-color-body);
     margin-left: 0.375rem;
     line-height: 1;
-    font-size: var(--font-size-body);
   }
 
   &:has(input[type='checkbox']:disabled) {
     cursor: not-allowed;
-
-    color: var(--gray-400);
-  }
-
-  &.labelOnLeft {
-    flex-direction: row-reverse;
-
-    span {
-      margin-left: 0rem;
-      margin-right: 0.375rem;
-    }
+    color: var(--font-color-disabled);
   }
 
   &.size-sm {
@@ -64,8 +45,18 @@
     }
 
     span {
-      margin-left: 0.25rem;
       font-size: var(--font-size-sm);
+    }
+  }
+
+  &.size-md {
+    .square {
+      width: 1rem;
+      height: 1rem;
+    }
+
+    span {
+      font-size: var(--font-size-body);
     }
   }
 
@@ -73,6 +64,7 @@
     .square {
       width: 1.25rem;
       height: 1.25rem;
+      border-radius: var(--border-radius-md);
     }
 
     span {
@@ -80,4 +72,18 @@
       font-size: var(--font-size-lg);
     }
   }
+
+  &.labelOnLeft {
+    flex-direction: row-reverse;
+
+    span {
+      margin-left: 0;
+      margin-right: 0.375rem;
+    }
+  }
+}
+
+input[type='checkbox'] {
+  appearance: none;
+  margin: 0;
 }

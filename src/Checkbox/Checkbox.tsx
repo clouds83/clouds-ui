@@ -8,7 +8,7 @@ export interface CheckboxProps extends InputHTMLAttributes<HTMLInputElement> {
   customClass?: string
 }
 
-const Checkbox: React.FC<CheckboxProps> = ({ label, checkboxSize = 'sm', labelOnLeft, customClass, ...props }) => {
+const Checkbox: React.FC<CheckboxProps> = ({ label, checkboxSize = 'md', labelOnLeft, customClass, ...props }) => {
   const checkboxClasses = [
     styles.checkboxLabel,
     styles[`size-${checkboxSize}`],
