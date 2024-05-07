@@ -1,14 +1,41 @@
 import type { Meta, StoryObj } from '@storybook/react'
 import Button, { ButtonProps } from './Button'
-import Icon from '../_Mock/Icon/Icon'
+import Icon from '../_mock/Icon/Icon'
 
 const meta: Meta<ButtonProps> = {
   title: 'Components/Button',
   component: Button,
-  parameters: {
-    docs: {
-      description: {
-        component: 'A customizable button component.',
+  argTypes: {
+    variant: {
+      options: ['primary', 'secondary', 'outline', 'ghost', 'link', 'destructive'],
+      control: {
+        type: 'select',
+      },
+    },
+    size: {
+      options: ['xs', 'sm', 'md', 'lg', 'icon'],
+      control: {
+        type: 'select',
+      },
+    },
+    roundness: {
+      options: [
+        'rounded-none',
+        'rounded-sm',
+        'rounded',
+        'rounded-md',
+        'rounded-lg',
+        'rounded-xl',
+        'rounded-2xl',
+        'rounded-full',
+      ],
+      control: {
+        type: 'select',
+      },
+    },
+    iconRight: {
+      control: {
+        type: 'boolean',
       },
     },
   },
@@ -23,7 +50,7 @@ export const Default: Story = {
     children: 'Button',
     variant: 'primary',
     size: 'md',
-    pill: false,
+    roundness: 'rounded-md',
   },
 }
 
@@ -32,7 +59,7 @@ export const Destructive: Story = {
     children: 'Destructive Button',
     variant: 'destructive',
     size: 'md',
-    pill: false,
+    roundness: 'rounded-md',
   },
 }
 
@@ -41,7 +68,7 @@ export const Outline: Story = {
     children: 'Outline Button',
     variant: 'outline',
     size: 'md',
-    pill: false,
+    roundness: 'rounded-md',
   },
 }
 
@@ -50,7 +77,7 @@ export const Secondary: Story = {
     children: 'Secondary Button',
     variant: 'secondary',
     size: 'md',
-    pill: false,
+    roundness: 'rounded-md',
   },
 }
 
@@ -59,7 +86,7 @@ export const Ghost: Story = {
     children: 'Ghost Button',
     variant: 'ghost',
     size: 'md',
-    pill: false,
+    roundness: 'rounded-md',
   },
 }
 
@@ -68,7 +95,7 @@ export const Link: Story = {
     children: 'Link Button',
     variant: 'link',
     size: 'md',
-    pill: false,
+    roundness: 'rounded-md',
   },
 }
 
@@ -76,7 +103,7 @@ export const ExtraSmall: Story = {
   args: {
     children: 'Extra Small',
     size: 'xs',
-    pill: false,
+    roundness: 'rounded-md',
   },
 }
 
@@ -84,7 +111,7 @@ export const Small: Story = {
   args: {
     children: 'Small Button',
     size: 'sm',
-    pill: false,
+    roundness: 'rounded-md',
   },
 }
 
@@ -92,7 +119,7 @@ export const Large: Story = {
   args: {
     children: 'Large Button',
     size: 'lg',
-    pill: false,
+    roundness: 'rounded-md',
   },
 }
 
@@ -101,8 +128,8 @@ export const WithIcon: Story = {
     children: 'With Icon',
     variant: 'primary',
     size: 'md',
-    pill: false,
-    Icon: <Icon color='fill-white' />,
+    roundness: 'rounded-md',
+    Icon: <Icon />,
   },
 }
 
@@ -111,17 +138,26 @@ export const WithIconRight: Story = {
     children: 'Icon Right',
     variant: 'primary',
     size: 'md',
-    pill: false,
-    Icon: <Icon color='fill-white' />,
+    roundness: 'rounded-md',
     iconRight: true,
+    Icon: <Icon />,
   },
 }
 
 export const IconOnly: Story = {
   args: {
     variant: 'primary',
-    size: 'icon',
-    pill: false,
-    Icon: <Icon color='fill-white' />,
+    size: 'xs',
+    roundness: 'rounded-md',
+    Icon: <Icon />,
+  },
+}
+
+export const PillShaped: Story = {
+  args: {
+    children: 'Pill Shaped',
+    variant: 'primary',
+    size: 'md',
+    roundness: 'rounded-full',
   },
 }
