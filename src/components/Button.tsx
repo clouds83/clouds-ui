@@ -1,89 +1,90 @@
-import { ButtonHTMLAttributes, forwardRef, ReactNode } from "react";
-import cn from "~/utils/cn";
+'use client'
 
-export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
-  variant:
-    | "primary"
-    | "secondary"
-    | "outline"
-    | "ghost"
-    | "link"
-    | "destructive";
-  size: "xs" | "sm" | "md" | "lg";
-  roundness?:
-    | "rounded-none"
-    | "rounded-sm"
-    | "rounded"
-    | "rounded-md"
-    | "rounded-lg"
-    | "rounded-xl"
-    | "rounded-2xl"
-    | "rounded-full";
-  Icon?: ReactNode;
-  iconRight?: boolean;
-  iconClass?: string;
-  className?: string;
+import { forwardRef, ReactNode } from 'react'
+import clsx from 'clsx'
+import cn from '@/utils/cn'
+
+type ButtonProps = {
+  variant?:
+    | 'primary'
+    | 'secondary'
+    | 'outline'
+    | 'ghost'
+    | 'link'
+    | 'destructive'
+  size?: 'xs' | 'sm' | 'md' | 'lg'
+  Icon?: ReactNode
+  iconRight?: boolean
+  iconClass?: string
+  className?: string
+  children?: ReactNode
+  href?: string
 }
 
-const defaultClasses =
-  "inline-flex items-center justify-center gap-2 whitespace-nowrap text-md font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-black disabled:pointer-events-none disabled:opacity-50";
+const baseClasses = clsx(
+  'inline-flex items-center justify-center gap-2 whitespace-nowrap text-md font-medium transition-colors rounded-md',
+  'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-black',
+  'disabled:pointer-events-none disabled:opacity-50',
+)
 
-const componentVariants = {
+const variantsClasses = {
   variant: {
-    primary: "bg-blue-600 text-white hover:bg-blue-500 active:bg-blue-600",
+    primary: 'bg-blue-600 text-white hover:bg-blue-500 active:bg-blue-600',
     secondary:
-      "bg-yellow-400 text-black hover:bg-yellow-300 active:bg-yellow-400",
-    outline: "border border-gray-300 hover:bg-gray-100 active:bg-gray-200",
-    ghost: "bg-gray-100 text-black hover:bg-gray-200 active:bg-gray-100",
-    link: "text-black underline-offset-4 hover:underline active:translate-y-0.5",
-    destructive: "bg-red-600 text-white hover:bg-red-500 active:bg-red-600",
+      'bg-yellow-400 text-black hover:bg-yellow-300 active:bg-yellow-400',
+    outline: 'border border-gray-300 hover:bg-gray-100 active:bg-gray-200',
+    ghost: 'bg-gray-100 text-black hover:bg-gray-200 active:bg-gray-100',
+    link: 'text-black underline-offset-4 hover:underline active:translate-y-0.5',
+    destructive: 'bg-red-600 text-white hover:bg-red-500 active:bg-red-600',
   },
   size: {
-    xs: "h-9 px-3 text-sm",
-    sm: "h-10 px-4",
-    md: "h-11 px-5",
-    lg: "h-12 px-6 text-lg",
+    xs: 'h-9 px-4 text-xs',
+    sm: 'h-10 px-5 text-sm',
+    md: 'h-12 px-6',
+    lg: 'h-14 px-8 text-lg',
   },
-};
+}
 
-const Button = forwardRef<HTMLButtonElement, ButtonProps>(
+// TODO find a way to recove autocomplete
+const Button = forwardRef<HTMLElement, ButtonProps>(
   (
     {
-      variant = "primary",
-      size = "md",
-      roundness = "rounded-md",
+      variant = 'primary',
+      size = 'md',
       Icon,
       children,
       iconRight,
       iconClass,
       className,
+      href,
       ...props
     },
     ref,
   ) => {
-    const iconOnly = !children;
+    const Component = href ? 'a' : 'button'
+    const iconOnly = !children
 
     return (
-      <button
+      <Component
+        ref={ref as any}
         className={cn(
-          defaultClasses,
-          componentVariants.variant[variant],
-          componentVariants.size[size],
-          roundness,
+          baseClasses,
+          variantsClasses.variant[variant],
+          variantsClasses.size[size],
           {
-            "flex-row-reverse": iconRight,
-            "aspect-square p-0": iconOnly,
+            'flex-row-reverse': iconRight,
+            'aspect-square p-0': iconOnly,
           },
           className,
         )}
-        ref={ref}
+        {...(href ? { href } : undefined)}
         {...props}
       >
         {Icon && (
           <span
             className={cn(
-              iconRight ? "-mr-1" : "-ml-1",
-              { ["m-0"]: iconOnly },
+              iconRight ? '-mr-1' : '-ml-1',
+              { ['m-0']: iconOnly },
               iconClass,
             )}
           >
@@ -91,9 +92,11 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
           </span>
         )}
         {children}
-      </button>
-    );
+      </Component>
+    )
   },
-);
+)
 
-export default Button;
+Button.displayName = 'Button'
+
+export default Button

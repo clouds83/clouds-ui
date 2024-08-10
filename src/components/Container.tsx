@@ -4,7 +4,7 @@ import React, {
   HTMLAttributes,
   ElementType,
 } from "react";
-import cn from "~/utils/cn";
+import cn from "@/utils/cn";
 
 interface ContainerProps extends HTMLAttributes<HTMLElement> {
   as?: ElementType;
