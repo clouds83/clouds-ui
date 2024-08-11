@@ -1,4 +1,4 @@
-import Link from "next/link";
+import Link from 'next/link'
 
 export default function Sidebar() {
   return (
@@ -7,13 +7,18 @@ export default function Sidebar() {
 
       <ul>
         <li>
-          <Link href="/button" className="hover:underline">
-            Button
+          <Link href="/action" className="hover:underline">
+            Action (Button/Link)
           </Link>
         </li>
         <li>
           <Link href="/input" className="hover:underline">
             Input
+          </Link>
+        </li>
+        <li>
+          <Link href="/input-icon" className="hover:underline">
+            Input with icon
           </Link>
         </li>
         <li>
@@ -23,5 +28,5 @@ export default function Sidebar() {
         </li>
       </ul>
     </aside>
-  );
+  )
 }
