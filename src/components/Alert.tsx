@@ -4,7 +4,7 @@ import { clsx, cn } from '@/utils'
 import { XMarkIcon, InformationCircleIcon } from '@heroicons/react/20/solid'
 
 type AlertProps = {
-  variant?: 'neutral' | 'destructive' | 'warning' | 'info' | 'success'
+  variant?: 'neutral' | 'error' | 'warning' | 'info' | 'success'
   className?: string
   children?: React.ReactNode
   title: string
@@ -19,7 +19,7 @@ const baseClasses = clsx('relative w-full rounded-lg border p-4 flex gap-2')
 const variantsClasses = {
   variant: {
     neutral: 'bg-white border-gray-300 [&>svg]:text-gray-600',
-    destructive: 'bg-red-50 border-red-300 [&>svg]:text-red-600',
+    error: 'bg-red-50 border-red-300 [&>svg]:text-red-600',
     warning: 'bg-yellow-50 border-yellow-400 [&>svg]:text-yellow-700',
     info: 'bg-blue-50 border-blue-300 [&>svg]:text-blue-600',
     success: 'bg-green-50 border-green-300 [&>svg]:text-green-700'

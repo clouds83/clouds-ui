@@ -5,13 +5,7 @@ import { cn, clsx } from '@/utils'
 import Link, { LinkProps } from 'next/link'
 
 type BaseProps = {
-  variant?:
-    | 'primary'
-    | 'secondary'
-    | 'outline'
-    | 'ghost'
-    | 'link'
-    | 'destructive'
+  variant?: 'primary' | 'secondary' | 'outline' | 'ghost' | 'link' | 'error'
   size?: 'xs' | 'sm' | 'md' | 'lg'
   Icon?: ReactNode
   iconRight?: boolean
@@ -44,7 +38,7 @@ const variantsClasses = {
     outline: 'border border-gray-300 hover:bg-gray-100 active:bg-gray-200',
     ghost: 'bg-gray-100 text-black hover:bg-gray-200 active:bg-gray-100',
     link: 'text-black underline-offset-4 hover:underline active:translate-y-0.5',
-    destructive: 'bg-red-600 text-white hover:bg-red-500 active:bg-red-600'
+    error: 'bg-red-600 text-white hover:bg-red-500 active:bg-red-600'
   },
   size: {
     xs: 'h-9 px-4 text-xs',

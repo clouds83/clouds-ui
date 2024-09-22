@@ -17,6 +17,11 @@ export function Sidebar() {
           </Link>
         </li>
         <li>
+          <Link href="/badge" className="hover:underline">
+            Badge
+          </Link>
+        </li>
+        <li>
           <Link href="/button" className="hover:underline">
             Button
           </Link>

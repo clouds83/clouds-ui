@@ -20,14 +20,14 @@ export default function AlertPage() {
         This is a default alert
       </Alert>
 
-      <h2 className="mb-2">Destructive</h2>
+      <h2 className="mb-2">error</h2>
       <Alert
         title="Alert title lorem ipsun"
-        variant="destructive"
+        variant="error"
         className="mb-6"
         onClose={() => {}}
       >
-        This is a destructive alert
+        This is a error alert
       </Alert>
 
       <h2 className="mb-2">Warning</h2>

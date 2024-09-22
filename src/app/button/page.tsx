@@ -17,8 +17,8 @@ export default function ButtonPage() {
         <Button as="button" variant="outline">
           outline
         </Button>
-        <Button as="button" variant="destructive">
-          destructive
+        <Button as="button" variant="error">
+          error
         </Button>
         <Button as="button" variant="ghost">
           ghost
