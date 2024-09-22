@@ -1,7 +1,6 @@
 import { InputHTMLAttributes, forwardRef } from 'react'
-import cn from '@/utils/cn'
-import Input from './Input'
-import clsx from 'clsx'
+import { cn, clsx } from '@/utils'
+import { Input } from '@/components'
 
 export interface InputIconProps extends InputHTMLAttributes<HTMLInputElement> {
   IconLeft?: JSX.ElementType
@@ -24,13 +23,13 @@ const InputIcon = forwardRef<HTMLInputElement, InputIconProps>(
       className,
       ...props
     },
-    ref,
+    ref
   ) => {
     return (
       <div
         className={cn(
           'relative flex items-center rounded-md bg-white',
-          className,
+          className
         )}
         ref={ref}
       >
@@ -38,30 +37,24 @@ const InputIcon = forwardRef<HTMLInputElement, InputIconProps>(
           {...props}
           className={clsx({
             'pl-9': IconLeft,
-            'pr-9': IconRight,
+            'pr-9': IconRight
           })}
         />
 
         {IconLeft && (
           <IconLeft
-            className={cn(
-              'absolute left-2.5 size-5 fill-blue-600',
-              iconLeftClasses,
-            )}
+            className={cn('absolute left-2.5 size-5', iconLeftClasses)}
           />
         )}
 
         {IconRight && (
           <IconRight
-            className={cn(
-              'absolute right-2.5 size-5 fill-blue-600',
-              iconRightClasses,
-            )}
+            className={cn('absolute right-2.5 size-5', iconRightClasses)}
           />
         )}
       </div>
     )
-  },
+  }
 )
 
-export default InputIcon
+export { InputIcon }

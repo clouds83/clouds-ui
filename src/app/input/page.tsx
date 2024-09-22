@@ -1,8 +1,8 @@
-import Input from "@/components/Input";
+import { Input } from '@/components'
 
 export default function InputPage() {
   return (
-    <main className="py-6">
+    <main className="max-w-xs py-6">
       <h1 className="mb-8 text-2xl font-semibold">Input Component</h1>
 
       <div className="mb-6">
@@ -30,5 +30,5 @@ export default function InputPage() {
         <Input placeholder="Enter your password" valid />
       </div>
     </main>
-  );
+  )
 }

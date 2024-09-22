@@ -3,7 +3,7 @@ export default function HomePage() {
     <main className="py-6">
       <h1 className="mb-4 text-2xl font-semibold">Welcome to clouds|ui.</h1>
       <p>
-        A components library for Next.js, heavily influenced by{" "}
+        A components library for Next.js, heavily influenced by{' '}
         <a
           href="https://ui.shadcn.com/"
           className="hover:underline"
@@ -15,6 +15,53 @@ export default function HomePage() {
         .
       </p>
       <p>Choose a component using the sidebar on the left.</p>
+
+      {/* <ul>
+        <li>asd</li>
+        <li>asd</li>
+        <li>asd</li>
+        <li>asd</li>
+        <li>asd</li>
+        <li>asd</li>
+        <li>asd</li>
+        <li>asd</li>
+        <li>asd</li>
+        <li>asd</li>
+        <li>asd</li>
+        <li>asd</li>
+        <li>asd</li>
+        <li>asd</li>
+        <li>asd</li>
+        <li>asd</li>
+        <li>asd</li>
+        <li>asd</li>
+        <li>asd</li>
+        <li>asd</li>
+        <li>asd</li>
+        <li>asd</li>
+        <li>asd</li>
+        <li>asd</li>
+        <li>asd</li>
+        <li>asd</li>
+        <li>asd</li> <li>asd</li>
+        <li>asd</li>
+        <li>asd</li>
+        <li>asd</li>
+        <li>asd</li>
+        <li>asd</li>
+        <li>asd</li>
+        <li>asd</li>
+        <li>asd</li> <li>asd</li>
+        <li>asd</li>
+        <li>asd</li>
+        <li>asd</li>
+        <li>asd</li>
+        <li>asd</li>
+        <li>asd</li>
+        <li>asd</li>
+        <li>asd</li>
+        <li>asd</li>
+      </ul> */}
     </main>
-  );
+  )
 }

@@ -1,5 +1,5 @@
 import { InputHTMLAttributes, forwardRef } from 'react'
-import cn from '@/utils/cn'
+import { cn } from '@/utils'
 
 interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   type?: 'text' | 'password' | 'email' | 'number'
@@ -13,22 +13,22 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
       <input
         type={type}
         className={cn(
-          'flex h-10 w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm',
+          'flex h-12 w-full rounded-md border border-gray-300 bg-white px-3 text-sm',
           'focus-visible:border-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black',
           'disabled:cursor-not-allowed disabled:opacity-50',
           {
             'border-red-500 focus-visible:ring-red-500': error,
-            'border-green-500 focus-visible:ring-green-500': valid,
+            'border-green-500 focus-visible:ring-green-500': valid
           },
-          className,
+          className
         )}
         ref={ref}
         {...props}
       />
     )
-  },
+  }
 )
 
 Input.displayName = 'Input'
 
-export default Input
+export { Input }

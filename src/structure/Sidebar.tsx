@@ -1,11 +1,16 @@
 import Link from 'next/link'
 
-export default function Sidebar() {
+export function Sidebar() {
   return (
     <aside className="sticky top-14 h-[calc(100dvh-3.5rem)] w-full overflow-y-auto py-6 xl:top-16 xl:h-[calc(100dvh-4rem)]">
       <h2 className="mb-2 text-lg font-semibold">Components</h2>
 
       <ul>
+        <li>
+          <Link href="/accordion" className="hover:underline">
+            Accordion
+          </Link>
+        </li>
         <li>
           <Link href="/action" className="hover:underline">
             Action (Button/Link)
@@ -26,6 +31,50 @@ export default function Sidebar() {
             Toggle
           </Link>
         </li>
+        {/* <li>asd</li>
+        <li>asd</li>
+        <li>asd</li>
+        <li>asd</li>
+        <li>asd</li>
+        <li>asd</li>
+        <li>asd</li>
+        <li>asd</li>
+        <li>asd</li>
+        <li>asd</li>
+        <li>asd</li>
+        <li>asd</li>
+        <li>asd</li>
+        <li>asd</li>
+        <li>asd</li>
+        <li>asd</li>
+        <li>asd</li>
+        <li>asd</li>
+        <li>asd</li>
+        <li>asd</li>
+        <li>asd</li>
+        <li>asd</li>
+        <li>asd</li>
+        <li>asd</li>
+        <li>asd</li>
+        <li>asd</li>
+        <li>asd</li> <li>asd</li>
+        <li>asd</li>
+        <li>asd</li>
+        <li>asd</li>
+        <li>asd</li>
+        <li>asd</li>
+        <li>asd</li>
+        <li>asd</li>
+        <li>asd</li> <li>asd</li>
+        <li>asd</li>
+        <li>asd</li>
+        <li>asd</li>
+        <li>asd</li>
+        <li>asd</li>
+        <li>asd</li>
+        <li>asd</li>
+        <li>asd</li>
+        <li>asd</li> */}
       </ul>
     </aside>
   )

@@ -1,4 +1,4 @@
-import Toggle from "@/components/Toggle";
+import { Toggle } from '@/components'
 
 export default function TogglePage() {
   return (
@@ -31,5 +31,5 @@ export default function TogglePage() {
         </label>
       </div>
     </main>
-  );
+  )
 }

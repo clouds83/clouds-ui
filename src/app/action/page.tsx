@@ -1,5 +1,5 @@
-import Action from '@/components/Action'
-import Icon from '@/../mock/icons/Icon'
+import { Action } from '@/components'
+import { HandThumbUpIcon } from '@heroicons/react/24/solid'
 
 export default function ActionPage() {
   return (
@@ -30,29 +30,39 @@ export default function ActionPage() {
 
       <h2 className="mb-4">Sizes</h2>
       <div className="mb-8 flex flex-wrap gap-4">
-        <Action as="a" href="#!" size="xs">
+        <Action as="link" href="#!" size="xs">
           xs
         </Action>
-        <Action as="a" href="#!" size="sm">
+        <Action as="link" href="#!" size="sm">
           sm
         </Action>
-        <Action as="a" href="#!" size="md">
+        <Action as="link" href="#!" size="md">
           md
         </Action>
-        <Action as="a" href="#!" size="lg">
+        <Action as="link" href="#!" size="lg">
           lg
         </Action>
       </div>
 
       <h2 className="mb-4">With icon</h2>
       <div className="mb-8 flex flex-wrap gap-4">
-        <Action as="button" Icon={<Icon />}>
+        <Action
+          as="button"
+          Icon={<HandThumbUpIcon className="size-4 text-white" />}
+        >
           Icon
         </Action>
-        <Action as="button" Icon={<Icon />} iconRight>
+        <Action
+          as="button"
+          Icon={<HandThumbUpIcon className="size-4 text-white" />}
+          iconRight
+        >
           iconRight
         </Action>
-        <Action as="button" Icon={<Icon />} />
+        <Action
+          as="button"
+          Icon={<HandThumbUpIcon className="size-4 text-white" />}
+        />
       </div>
     </main>
   )

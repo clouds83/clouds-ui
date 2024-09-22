@@ -1,21 +1,19 @@
-import "@/globals.css";
-import { type Metadata } from "next";
-import { Inter } from "next/font/google";
-import Footer from "@/structure/Footer";
-import Header from "@/structure/Header";
-import Sidebar from "@/structure/Sidebar";
-import Container from "@/components/Container";
+import '@/globals.css'
+import { type Metadata } from 'next'
+import { Inter } from 'next/font/google'
+import { Header, Footer, Sidebar } from '@/structure'
+import { Container } from '@/components'
 
-const inter = Inter({ subsets: ["latin"] });
+const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: "clouds/ui",
-  description: "My personal design system",
-  icons: [{ rel: "icon", url: "/favicon.png" }],
-};
+  title: 'clouds/ui',
+  description: 'My personal design system',
+  icons: [{ rel: 'icon', url: '/favicon.png' }]
+}
 
 export default function RootLayout({
-  children,
+  children
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en" className={`${inter.className}`}>
@@ -28,5 +26,5 @@ export default function RootLayout({
         <Footer />
       </body>
     </html>
-  );
+  )
 }
