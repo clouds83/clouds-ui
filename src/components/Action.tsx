@@ -106,9 +106,9 @@ const Action = forwardRef(
       return (
         <Link
           ref={ref as React.Ref<HTMLAnchorElement>}
+          href={href as Url}
           className={classes}
           {...rest}
-          href={href as Url}
         >
           <Content />
         </Link>
@@ -121,6 +121,7 @@ const Action = forwardRef(
       return (
         <button
           ref={ref as React.Ref<HTMLButtonElement>}
+          type="button"
           className={classes}
           {...rest}
         >
