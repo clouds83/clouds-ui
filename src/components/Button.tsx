@@ -1,10 +1,8 @@
 'use client'
 
 import { forwardRef, ReactNode } from 'react'
-import clsx from 'clsx'
-import { cn } from '@/utils'
+import { cn, clsx } from '@/utils'
 import Link, { LinkProps } from 'next/link'
-import { Url } from 'next/dist/shared/lib/router/router'
 
 type BaseProps = {
   variant?:
@@ -22,7 +20,7 @@ type BaseProps = {
   children?: ReactNode
 }
 
-type ActionProps = BaseProps &
+type ButtonProps = BaseProps &
   (
     | (React.ButtonHTMLAttributes<HTMLButtonElement> & {
         as: 'button'
@@ -56,7 +54,7 @@ const variantsClasses = {
   }
 }
 
-const Action = forwardRef(
+const Button = forwardRef<HTMLButtonElement | HTMLAnchorElement, ButtonProps>(
   (
     {
       children,
@@ -67,7 +65,7 @@ const Action = forwardRef(
       iconClass,
       className,
       ...props
-    }: ActionProps,
+    },
     ref
   ) => {
     const iconOnly = !children
@@ -81,32 +79,44 @@ const Action = forwardRef(
       },
       className
     )
-    const Content = () => {
+
+    const Content = () => (
+      <>
+        {Icon && (
+          <span
+            className={cn(
+              iconRight ? '-mr-1' : '-ml-1',
+              { ['m-0']: iconOnly },
+              iconClass
+            )}
+          >
+            {Icon}
+          </span>
+        )}
+        {children}
+      </>
+    )
+
+    if (props.as === 'button') {
+      const { as, ...rest } = props
       return (
-        <>
-          {Icon && (
-            <span
-              className={cn(
-                iconRight ? '-mr-1' : '-ml-1',
-                { ['m-0']: iconOnly },
-                iconClass
-              )}
-            >
-              {Icon}
-            </span>
-          )}
-          {children}
-        </>
+        <button
+          ref={ref as React.Ref<HTMLButtonElement>}
+          type="button"
+          className={classes}
+          {...(rest as React.ButtonHTMLAttributes<HTMLButtonElement>)}
+        >
+          <Content />
+        </button>
       )
     }
 
     if (props.as === 'link') {
-      const { as, href, ...rest } = props
+      const { as, ...rest } = props as LinkProps
 
       return (
         <Link
           ref={ref as React.Ref<HTMLAnchorElement>}
-          href={href as Url}
           className={classes}
           {...rest}
         >
@@ -115,25 +125,10 @@ const Action = forwardRef(
       )
     }
 
-    if (props.as === 'button') {
-      const { as, ...rest } = props
-
-      return (
-        <button
-          ref={ref as React.Ref<HTMLButtonElement>}
-          type="button"
-          className={classes}
-          {...rest}
-        >
-          <Content />
-        </button>
-      )
-    }
-
     return null
   }
 )
 
-Action.displayName = 'Action'
+Button.displayName = 'Button'
 
-export { Action }
+export { Button }

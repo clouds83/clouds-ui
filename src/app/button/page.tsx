@@ -1,65 +1,65 @@
-import { Action } from '@/components'
+import { Button } from '@/components'
 import { HandThumbUpIcon } from '@heroicons/react/24/solid'
 
-export default function ActionPage() {
+export default function ButtonPage() {
   return (
     <main className="py-6">
       <h1 className="mb-8 text-2xl font-semibold">
-        Action Component (button and link)
+        Button Component (button and link)
       </h1>
 
       <h2 className="mb-4">Variants</h2>
       <div className="mb-8 flex flex-wrap gap-4">
-        <Action as="button">primary</Action>
-        <Action as="button" variant="secondary">
+        <Button as="button">primary</Button>
+        <Button as="link" variant="secondary" href="/">
           secondary
-        </Action>
-        <Action as="button" variant="outline">
+        </Button>
+        <Button as="button" variant="outline">
           outline
-        </Action>
-        <Action as="button" variant="destructive">
+        </Button>
+        <Button as="button" variant="destructive">
           destructive
-        </Action>
-        <Action as="button" variant="ghost">
+        </Button>
+        <Button as="button" variant="ghost">
           ghost
-        </Action>
-        <Action as="button" variant="link">
+        </Button>
+        <Button as="button" variant="link">
           link
-        </Action>
+        </Button>
       </div>
 
       <h2 className="mb-4">Sizes</h2>
       <div className="mb-8 flex flex-wrap gap-4">
-        <Action as="link" href="#!" size="xs">
+        <Button as="link" href="#!" size="xs">
           xs
-        </Action>
-        <Action as="link" href="#!" size="sm">
+        </Button>
+        <Button as="link" href="#!" size="sm">
           sm
-        </Action>
-        <Action as="link" href="#!" size="md">
+        </Button>
+        <Button as="link" href="#!" size="md">
           md
-        </Action>
-        <Action as="link" href="#!" size="lg">
+        </Button>
+        <Button as="link" href="#!" size="lg">
           lg
-        </Action>
+        </Button>
       </div>
 
       <h2 className="mb-4">With icon</h2>
       <div className="mb-8 flex flex-wrap gap-4">
-        <Action
+        <Button
           as="button"
           Icon={<HandThumbUpIcon className="size-4 text-white" />}
         >
           Icon
-        </Action>
-        <Action
+        </Button>
+        <Button
           as="button"
           Icon={<HandThumbUpIcon className="size-4 text-white" />}
           iconRight
         >
           iconRight
-        </Action>
-        <Action
+        </Button>
+        <Button
           as="button"
           Icon={<HandThumbUpIcon className="size-4 text-white" />}
         />

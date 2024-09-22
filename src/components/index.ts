@@ -1,5 +1,5 @@
 export { Accordion } from './Accordion'
-export { Action } from './Action'
+export { Button } from './Button'
 export { Container } from './Container'
 export { Input } from './Input'
 export { InputIcon } from './InputIcon'

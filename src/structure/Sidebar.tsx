@@ -12,8 +12,13 @@ export function Sidebar() {
           </Link>
         </li>
         <li>
-          <Link href="/action" className="hover:underline">
-            Action (Button/Link)
+          <Link href="/alert" className="hover:underline">
+            Alert
+          </Link>
+        </li>
+        <li>
+          <Link href="/button" className="hover:underline">
+            Button
           </Link>
         </li>
         <li>
