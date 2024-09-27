@@ -8,9 +8,8 @@ export interface BadgeProps extends HTMLAttributes<HTMLDivElement> {
   dot?: boolean
 }
 
-const baseClasses = clsx(
-  'inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold h-fit'
-)
+const baseClasses =
+  'inline-flex items-center rounded-full border text-xs font-semibold h-fit'
 
 const badgeVariants = {
   variant: {
@@ -37,7 +36,6 @@ export function Badge({
 }: BadgeProps) {
   return (
     <div
-      role="status"
       className={cn(
         baseClasses,
         badgeVariants.variant[variant],
@@ -48,15 +46,15 @@ export function Badge({
     >
       {dot && (
         <span
-          className={cn('size-1.5 rounded-full', {
+          className={clsx('rounded-full', {
             'bg-blue-400': variant === 'default',
             'bg-gray-500': variant === 'neutral',
             'bg-green-400': variant === 'success',
             'bg-yellow-500': variant === 'warning',
             'bg-red-500': variant === 'error',
-            '-ml-0.5 mr-1': size === 'sm',
-            '-ml-1 mr-1.5': size === 'md',
-            '-ml-1.5 mr-2': size === 'lg'
+            '-ml-0.5 mr-1 size-1.5': size === 'sm',
+            '-ml-1 mr-1.5 size-2': size === 'md',
+            '-ml-1.5 mr-2 size-2.5': size === 'lg'
           })}
         />
       )}

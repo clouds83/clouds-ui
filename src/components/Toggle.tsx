@@ -1,5 +1,5 @@
 import { InputHTMLAttributes, forwardRef } from 'react'
-import { cn, clsx } from '@/utils'
+import { cn } from '@/utils'
 
 export interface ToggleProps
   extends Omit<InputHTMLAttributes<HTMLInputElement>, 'size'> {
