@@ -46,6 +46,11 @@ export function Sidebar() {
             Toggle
           </Link>
         </li>
+        <li>
+          <Link href="/tooltip" className="hover:underline">
+            Tooltip
+          </Link>
+        </li>
       </ul>
     </aside>
   )
