@@ -1,4 +1,4 @@
-import { InputHTMLAttributes, forwardRef } from 'react'
+import { InputHTMLAttributes } from 'react'
 import { cn } from '@/utils'
 
 export interface ToggleProps
@@ -18,36 +18,30 @@ const circleSize = {
   lg: 'size-5 peer-checked:ml-5'
 }
 
-const Toggle = forwardRef<HTMLInputElement, ToggleProps>(
-  ({ size = 'md', ...props }, ref) => {
-    return (
+export function Toggle({ size = 'md', className, ...props }: ToggleProps) {
+  return (
+    <div
+      className={cn(
+        'relative flex h-fit shrink-0 rounded-full bg-gray-400 transition-colors duration-300',
+        'has-[:checked]:bg-blue-400 has-[:disabled]:opacity-50',
+        containerSize[size],
+        className
+      )}
+    >
+      <input
+        type="checkbox"
+        role="switch"
+        className="peer absolute inset-0 z-10 cursor-pointer opacity-0 disabled:cursor-not-allowed"
+        {...props}
+      />
+
       <div
         className={cn(
-          'relative flex h-fit shrink-0 rounded-full bg-gray-400 transition-colors duration-300',
-          'has-[:checked]:bg-blue-400 has-[:disabled]:opacity-50',
-          containerSize[size]
+          'size-4 appearance-none rounded-full bg-gray-100 checked:bg-white',
+          'ml-0 transition-[margin] duration-300',
+          circleSize[size]
         )}
-      >
-        <input
-          ref={ref}
-          type="checkbox"
-          role="switch"
-          className="peer absolute inset-0 z-10 cursor-pointer opacity-0 disabled:cursor-not-allowed"
-          {...props}
-        />
-
-        <div
-          className={cn(
-            'size-4 appearance-none rounded-full bg-gray-100 checked:bg-white',
-            'ml-0 transition-[margin] duration-300',
-            circleSize[size]
-          )}
-        ></div>
-      </div>
-    )
-  }
-)
-
-Toggle.displayName = 'Toggle'
-
-export { Toggle }
+      ></div>
+    </div>
+  )
+}

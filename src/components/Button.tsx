@@ -1,6 +1,6 @@
 'use client'
 
-import { forwardRef, ReactNode } from 'react'
+import { ReactNode } from 'react'
 import { cn, clsx } from '@/utils'
 import Link, { LinkProps } from 'next/link'
 
@@ -48,81 +48,67 @@ const variantsClasses = {
   }
 }
 
-const Button = forwardRef<HTMLButtonElement | HTMLAnchorElement, ButtonProps>(
-  (
+export function Button({
+  children,
+  variant = 'primary',
+  size = 'md',
+  Icon,
+  iconRight,
+  iconClass,
+  className,
+  ...props
+}: ButtonProps) {
+  const iconOnly = !children
+  const classes = cn(
+    baseClasses,
+    variantsClasses.variant[variant],
+    variantsClasses.size[size],
     {
-      children,
-      variant = 'primary',
-      size = 'md',
-      Icon,
-      iconRight,
-      iconClass,
-      className,
-      ...props
+      'flex-row-reverse': iconRight,
+      'aspect-square p-0': iconOnly
     },
-    ref
-  ) => {
-    const iconOnly = !children
-    const classes = cn(
-      baseClasses,
-      variantsClasses.variant[variant],
-      variantsClasses.size[size],
-      {
-        'flex-row-reverse': iconRight,
-        'aspect-square p-0': iconOnly
-      },
-      className
-    )
+    className
+  )
 
-    const Content = () => (
-      <>
-        {Icon && (
-          <span
-            className={cn(
-              iconRight ? '-mr-1' : '-ml-1',
-              { ['m-0']: iconOnly },
-              iconClass
-            )}
-          >
-            {Icon}
-          </span>
-        )}
-        {children}
-      </>
-    )
-
-    if (props.as === 'button') {
-      const { as, ...rest } = props
-      return (
-        <button
-          ref={ref as React.Ref<HTMLButtonElement>}
-          type="button"
-          className={classes}
-          {...(rest as React.ButtonHTMLAttributes<HTMLButtonElement>)}
+  const Content = () => (
+    <>
+      {Icon && (
+        <span
+          className={cn(
+            iconRight ? '-mr-1' : '-ml-1',
+            { ['m-0']: iconOnly },
+            iconClass
+          )}
         >
-          <Content />
-        </button>
-      )
-    }
+          {Icon}
+        </span>
+      )}
+      {children}
+    </>
+  )
 
-    if (props.as === 'link') {
-      const { as, ...rest } = props as LinkProps
-
-      return (
-        <Link
-          ref={ref as React.Ref<HTMLAnchorElement>}
-          className={classes}
-          {...rest}
-        >
-          <Content />
-        </Link>
-      )
-    }
-
-    return null
+  if (props.as === 'button') {
+    const { as, ...rest } = props
+    return (
+      <button
+        type="button"
+        className={classes}
+        {...(rest as React.ButtonHTMLAttributes<HTMLButtonElement>)}
+      >
+        <Content />
+      </button>
+    )
   }
-)
 
-Button.displayName = 'Button'
+  if (props.as === 'link') {
+    const { as, ...rest } = props as LinkProps
 
-export { Button }
+    return (
+      <Link className={classes} {...rest}>
+        <Content />
+      </Link>
+    )
+  }
+
+  return null
+}

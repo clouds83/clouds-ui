@@ -1,6 +1,6 @@
 'use client'
 
-import { Alert } from '@/components/Alert'
+import { Alert } from '@/components'
 import { useState } from 'react'
 
 export default function AlertPage() {
@@ -27,7 +27,7 @@ export default function AlertPage() {
         className="mb-6"
         onClose={() => {}}
       >
-        This is a error alert
+        This is an error alert
       </Alert>
 
       <h2 className="mb-2">Warning</h2>

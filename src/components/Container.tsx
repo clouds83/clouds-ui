@@ -1,24 +1,26 @@
-import { forwardRef, ReactNode, HTMLAttributes, ElementType } from 'react'
+import { ReactNode, ElementType } from 'react'
+import type { ComponentPropsWithoutRef } from 'react'
 import { cn } from '@/utils'
 
-interface ContainerProps extends HTMLAttributes<HTMLElement> {
-  as?: ElementType
+type ContainerProps<T extends ElementType> = {
+  as?: T
   className?: string
   children: ReactNode
+} & ComponentPropsWithoutRef<T>
+
+export function Container<T extends ElementType = 'div'>({
+  as,
+  className,
+  children,
+  ...props
+}: ContainerProps<T>) {
+  const Component = as || 'div'
+  return (
+    <Component
+      className={cn('mx-auto w-full max-w-[1440px] px-6 xl:px-8', className)}
+      {...props}
+    >
+      {children}
+    </Component>
+  )
 }
-
-const Container = forwardRef<HTMLElement, ContainerProps>(
-  ({ as: Component = 'div', className, children, ...props }, ref) => {
-    return (
-      <Component
-        ref={ref}
-        className={cn('mx-auto w-full max-w-[1440px] px-6 xl:px-8', className)}
-        {...props}
-      >
-        {children}
-      </Component>
-    )
-  }
-)
-
-export { Container }

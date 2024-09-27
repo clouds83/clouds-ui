@@ -37,54 +37,15 @@ export function Sidebar() {
           </Link>
         </li>
         <li>
+          <Link href="/modal" className="hover:underline">
+            Modal
+          </Link>
+        </li>
+        <li>
           <Link href="/toggle" className="hover:underline">
             Toggle
           </Link>
         </li>
-        {/* <li>asd</li>
-        <li>asd</li>
-        <li>asd</li>
-        <li>asd</li>
-        <li>asd</li>
-        <li>asd</li>
-        <li>asd</li>
-        <li>asd</li>
-        <li>asd</li>
-        <li>asd</li>
-        <li>asd</li>
-        <li>asd</li>
-        <li>asd</li>
-        <li>asd</li>
-        <li>asd</li>
-        <li>asd</li>
-        <li>asd</li>
-        <li>asd</li>
-        <li>asd</li>
-        <li>asd</li>
-        <li>asd</li>
-        <li>asd</li>
-        <li>asd</li>
-        <li>asd</li>
-        <li>asd</li>
-        <li>asd</li>
-        <li>asd</li> <li>asd</li>
-        <li>asd</li>
-        <li>asd</li>
-        <li>asd</li>
-        <li>asd</li>
-        <li>asd</li>
-        <li>asd</li>
-        <li>asd</li>
-        <li>asd</li> <li>asd</li>
-        <li>asd</li>
-        <li>asd</li>
-        <li>asd</li>
-        <li>asd</li>
-        <li>asd</li>
-        <li>asd</li>
-        <li>asd</li>
-        <li>asd</li>
-        <li>asd</li> */}
       </ul>
     </aside>
   )
