@@ -8,7 +8,7 @@ export default function TooltipPage() {
       <div className="grid space-y-12">
         <div className="group relative inline-block w-fit">
           <button
-            className="rounded-md bg-blue-600 px-4 py-2 text-white"
+            className="peer rounded-md bg-blue-600 px-4 py-2 text-white"
             aria-describedby="tooltip-id-1"
           >
             Top
@@ -20,7 +20,7 @@ export default function TooltipPage() {
 
         <div className="group relative inline-block w-fit">
           <button
-            className="rounded-md bg-blue-600 px-4 py-2 text-white"
+            className="peer rounded-md bg-blue-600 px-4 py-2 text-white"
             aria-describedby="tooltip-id-2"
           >
             Right
@@ -32,7 +32,7 @@ export default function TooltipPage() {
 
         <div className="group relative inline-block w-fit">
           <button
-            className="rounded-md bg-blue-600 px-4 py-2 text-white"
+            className="peer rounded-md bg-blue-600 px-4 py-2 text-white"
             aria-describedby="tooltip-id-3"
           >
             Bottom
@@ -44,7 +44,7 @@ export default function TooltipPage() {
 
         <div className="group relative inline-block w-fit">
           <button
-            className="rounded-md bg-blue-600 px-4 py-2 text-white"
+            className="peer rounded-md bg-blue-600 px-4 py-2 text-white"
             aria-describedby="tooltip-id-4"
           >
             Left

@@ -1,18 +1,17 @@
-import { ReactNode } from 'react'
+// components/Tooltip.tsx
+import { ReactNode, HTMLAttributes } from 'react'
 import { cn } from '@/utils'
 
-interface TooltipProps {
-  id?: string
+interface TooltipProps extends HTMLAttributes<HTMLDivElement> {
   position?: 'top' | 'bottom' | 'left' | 'right'
   children: ReactNode
-  className?: string
 }
 
 export function Tooltip({
-  id,
   position = 'top',
   children,
-  className
+  className,
+  ...props
 }: TooltipProps) {
   const positionClasses = {
     top: 'bottom-full left-1/2 transform -translate-x-1/2 mb-2',
@@ -23,14 +22,14 @@ export function Tooltip({
 
   return (
     <div
-      id={id}
       className={cn(
         'pointer-events-none absolute z-10 w-max max-w-xs rounded-md bg-black p-2 text-sm text-white opacity-0 transition-opacity duration-200',
         positionClasses[position],
-        'group-hover:opacity-100',
+        'group-hover:opacity-100 peer-focus-visible:opacity-100',
         className
       )}
       role="tooltip"
+      {...props}
     >
       {children}
     </div>
