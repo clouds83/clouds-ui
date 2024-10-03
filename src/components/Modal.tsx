@@ -1,22 +1,16 @@
 'use client'
 
-import { ReactNode } from 'react'
-import { clsx, cn } from '@/utils'
+import { ReactNode, useRef, useEffect } from 'react'
 import { XMarkIcon } from '@heroicons/react/20/solid'
+import { cn } from '@/utils'
 
-type ModalProps = {
+interface ModalProps {
   isOpen: boolean
   onClose: () => void
   children: ReactNode
   className?: string
   closeButton?: boolean
 }
-
-const overlayClasses =
-  'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50'
-
-const modalClasses =
-  'bg-white rounded-lg shadow-lg max-w-lg w-full p-6 relative'
 
 export function Modal({
   isOpen,
@@ -27,15 +21,51 @@ export function Modal({
 }: ModalProps) {
   if (!isOpen) return null
 
+  const modalRef = useRef<HTMLDivElement>(null)
+
   const handleOverlayClick = (e: React.MouseEvent<HTMLDivElement>) => {
     if (e.target === e.currentTarget) {
       onClose()
     }
   }
 
+  useEffect(() => {
+    const handleEsc = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        onClose()
+      }
+    }
+
+    document.addEventListener('keydown', handleEsc)
+
+    if (modalRef.current) {
+      modalRef.current.focus()
+    }
+
+    document.body.style.overflow = 'hidden'
+
+    return () => {
+      document.removeEventListener('keydown', handleEsc)
+      document.body.style.overflow = ''
+    }
+  }, [onClose])
+
   return (
-    <div className={overlayClasses} onClick={handleOverlayClick}>
-      <div className={cn(modalClasses, className)}>
+    <div
+      ref={modalRef}
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50"
+      onClick={handleOverlayClick}
+      role="dialog"
+      aria-modal="true"
+      aria-label="Modal"
+      tabIndex={-1}
+    >
+      <div
+        className={cn(
+          'relative w-full max-w-lg rounded-lg bg-white p-6 shadow-lg focus:outline-none',
+          className
+        )}
+      >
         {closeButton && (
           <button
             onClick={onClose}

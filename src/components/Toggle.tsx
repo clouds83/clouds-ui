@@ -23,7 +23,7 @@ export function Toggle({ size = 'md', className, ...props }: ToggleProps) {
     <div
       className={cn(
         'relative flex h-fit shrink-0 rounded-full bg-gray-400 transition-colors duration-300',
-        'has-[:checked]:bg-blue-400 has-[:disabled]:opacity-50',
+        'has-[:checked]:bg-blue-400 has-[:disabled]:opacity-50 has-[:focus-within]:ring-2 has-[:focus-within]:ring-black',
         containerSize[size],
         className
       )}
