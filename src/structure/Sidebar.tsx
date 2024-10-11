@@ -42,6 +42,11 @@ export function Sidebar() {
           </Link>
         </li>
         <li>
+          <Link href="/pagination" className="hover:underline">
+            Pagination
+          </Link>
+        </li>
+        <li>
           <Link href="/toggle" className="hover:underline">
             Toggle
           </Link>
