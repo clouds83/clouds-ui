@@ -3,14 +3,11 @@ import Link from 'next/link'
 interface PaginationProps {
   currentPage: number
   pageAmount: number
-  maxButtons: number
 }
 
-export function Pagination({
-  currentPage,
-  pageAmount,
-  maxButtons
-}: PaginationProps) {
+export function Pagination({ currentPage, pageAmount }: PaginationProps) {
+  const maxButtons = 9
+
   if (pageAmount <= 1) {
     return null
   }
@@ -29,18 +26,26 @@ export function Pagination({
       return pages
     }
 
+    const pagesToShow = maxButtons
+    const firstPage = 1
+    const lastPage = totalPages
+
     let numberOfEllipsis = 0
+    let showStartEllipsis = false
+    let showEndEllipsis = false
 
-    if (currentPage - 1 > 1) {
+    if (currentPage > 4) {
+      showStartEllipsis = true
       numberOfEllipsis += 1
     }
 
-    if (totalPages - currentPage > 1) {
+    if (currentPage < totalPages - 3) {
+      showEndEllipsis = true
       numberOfEllipsis += 1
     }
 
-    const numberOfFixedButtons = 2 + numberOfEllipsis // First page, last page, and ellipsis
-    const numberOfMiddleButtons = maxButtons - numberOfFixedButtons
+    const numberOfFixedButtons = 2 + numberOfEllipsis
+    const numberOfMiddleButtons = pagesToShow - numberOfFixedButtons
 
     let startPage = currentPage - Math.floor((numberOfMiddleButtons - 1) / 2)
     let endPage = currentPage + Math.ceil((numberOfMiddleButtons - 1) / 2)
@@ -53,11 +58,14 @@ export function Pagination({
     if (endPage > totalPages - 1) {
       endPage = totalPages - 1
       startPage = endPage - numberOfMiddleButtons + 1
+      if (startPage < 2) {
+        startPage = 2
+      }
     }
 
-    pages.push(1)
+    pages.push(firstPage)
 
-    if (startPage > 2) {
+    if (showStartEllipsis) {
       pages.push('...')
     }
 
@@ -65,11 +73,11 @@ export function Pagination({
       pages.push(i)
     }
 
-    if (endPage < totalPages - 1) {
+    if (showEndEllipsis) {
       pages.push('...')
     }
 
-    pages.push(totalPages)
+    pages.push(lastPage)
 
     return pages
   }
@@ -78,7 +86,7 @@ export function Pagination({
 
   const buildPageUrl = (page: number) => {
     if (page === 1) {
-      return '?' // Remove the page param for the first page
+      return '?'
     } else {
       const params = new URLSearchParams()
       params.set('page', page.toString())
@@ -94,9 +102,7 @@ export function Pagination({
       <Link
         href={currentPage > 1 ? buildPageUrl(currentPage - 1) : '#'}
         className={`rounded-md px-3 py-1 ${
-          currentPage > 1
-            ? 'hover:bg-gray-200'
-            : 'cursor-not-allowed text-gray-400'
+          currentPage > 1 ? 'hover:bg-gray-200' : 'cursor-default text-gray-400'
         }`}
         aria-disabled={currentPage <= 1}
         aria-label="Previous Page"
@@ -131,7 +137,7 @@ export function Pagination({
         className={`rounded-md px-3 py-1 ${
           currentPage < pageAmount
             ? 'hover:bg-gray-200'
-            : 'cursor-not-allowed text-gray-400'
+            : 'cursor-default text-gray-400'
         }`}
         aria-disabled={currentPage >= pageAmount}
         aria-label="Next Page"
