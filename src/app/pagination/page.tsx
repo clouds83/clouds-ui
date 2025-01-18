@@ -8,7 +8,8 @@ interface PaginationPageProps {
   searchParams: SearchParams
 }
 
-const PaginationPage: React.FC<PaginationPageProps> = ({ searchParams }) => {
+const PaginationPage: React.FC<PaginationPageProps> = async props => {
+  const searchParams = await props.searchParams;
   const { page = '1' } = searchParams
   const currentPage = parseInt(page, 10) || 1
 

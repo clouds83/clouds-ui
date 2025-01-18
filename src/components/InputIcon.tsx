@@ -1,4 +1,4 @@
-import { InputHTMLAttributes } from 'react'
+import { InputHTMLAttributes, type JSX } from 'react';
 import { cn, clsx } from '@/utils'
 import { Input } from '@/components'
 
