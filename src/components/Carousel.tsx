@@ -128,7 +128,7 @@ export function Carousel({ items }: InteractiveCarouselProps) {
       <div
         ref={trackRef}
         // Use grab/grabbing cursor for a better drag UX
-        className={`flex ${isDragging ? 'cursor-pointer' : 'cursor-pointer'}`}
+        className={`flex cursor-pointer`}
         style={{
           transition: transitionEnabled ? 'transform 0.3s' : 'none',
           transform: `translateX(${translateX}px)`,
