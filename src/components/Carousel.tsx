@@ -1,6 +1,5 @@
 'use client'
-
-import { useState, useEffect, useRef } from 'react'
+import React, { useEffect, useState, useRef, useCallback } from 'react'
 
 interface CarouselItem {
   id: number
@@ -12,160 +11,196 @@ interface InteractiveCarouselProps {
 }
 
 export function Carousel({ items }: InteractiveCarouselProps) {
-  const totalItems = items.length
-  const extendedItems = [...items, ...items, ...items] // Clones before and after
-  const [currentIndex, setCurrentIndex] = useState(totalItems) // Start in the middle
-  const [isAnimating, setIsAnimating] = useState(false)
-  const [transitionEnabled, setTransitionEnabled] = useState(true)
+  // For infinite loop, create clones at front & back
+  const fullItems = [...items, ...items, ...items]
+  const middleIndexOffset = items.length // We'll jump here to re-center
 
-  // Drag states
-  const [isDragging, setIsDragging] = useState(false)
-  const [dragStartX, setDragStartX] = useState<number | null>(null)
-  const [dragOffsetX, setDragOffsetX] = useState(0)
+  const sliderRef = useRef<HTMLDivElement>(null)
+  const [isDown, setIsDown] = useState(false)
+  const [startX, setStartX] = useState<number | null>(null)
+  const [scrollLeft, setScrollLeft] = useState(0)
+  const [mouseTraveled, setMouseTraveled] = useState(0)
+  const cardWidthRef = useRef<number>(300) // default; updated on mount
 
-  const trackRef = useRef<HTMLDivElement>(null)
-  const cardWidth = 300
+  // Keep track if we’ve already set the initial scroll to middle
+  const didInitRef = useRef(false)
 
-  // Handle click on next button
-  const handleNext = () => {
-    if (isAnimating) return
-    setIsAnimating(true)
-    setCurrentIndex((prev) => prev + 1)
-  }
-
-  // Handle click on previous button
-  const handlePrev = () => {
-    if (isAnimating) return
-    setIsAnimating(true)
-    setCurrentIndex((prev) => prev - 1)
-  }
-
-  // Handle transition end to "teleport" when leaving the middle range
-  const handleTransitionEnd = () => {
-    if (currentIndex >= totalItems * 2) {
-      setTransitionEnabled(false)
-      setCurrentIndex(currentIndex - totalItems)
-    } else if (currentIndex < totalItems) {
-      setTransitionEnabled(false)
-      setCurrentIndex(currentIndex + totalItems)
-    } else {
-      setIsAnimating(false)
-    }
-  }
-
-  // Listen for transition end
+  // Positioning: move the scroll when user drags
   useEffect(() => {
-    const el = trackRef.current
-    if (!el) return
+    if (!sliderRef.current) return
+    sliderRef.current.scrollLeft = scrollLeft - mouseTraveled
+  }, [scrollLeft, mouseTraveled])
 
-    el.addEventListener('transitionend', handleTransitionEnd)
+  // On mount, measure card width & set the slider to the middle
+  useEffect(() => {
+    if (!sliderRef.current || didInitRef.current) return
+    didInitRef.current = true
+
+    // measure actual card width if needed
+    const firstCard = sliderRef.current.querySelector(
+      '.carousel-card'
+    ) as HTMLElement
+    if (firstCard) {
+      cardWidthRef.current = firstCard.offsetWidth
+    }
+
+    // Move to the middle block
+    const offset = items.length * cardWidthRef.current
+    sliderRef.current.scrollLeft = offset
+    setScrollLeft(offset)
+  }, [items])
+
+  // Attach global mousemove/mouseup listeners so that
+  // drag continues even if cursor leaves slider
+  useEffect(() => {
+    const handleGlobalMouseMove = (e: MouseEvent) => {
+      if (!isDown || startX === null) return
+      const offsetLeft = sliderRef.current?.offsetLeft ?? 0
+      const currentMouseX = e.pageX - offsetLeft
+      setMouseTraveled(currentMouseX - startX)
+    }
+
+    const handleGlobalMouseUp = () => {
+      if (!isDown) return
+      endDrag()
+    }
+
+    window.addEventListener('mousemove', handleGlobalMouseMove)
+    window.addEventListener('mouseup', handleGlobalMouseUp)
+
     return () => {
-      el.removeEventListener('transitionend', handleTransitionEnd)
+      window.removeEventListener('mousemove', handleGlobalMouseMove)
+      window.removeEventListener('mouseup', handleGlobalMouseUp)
     }
-  }, [currentIndex, totalItems])
+  }, [isDown, startX])
 
-  // Re-enable transition after teleporting
+  // If we scroll too far left or right (in the cloned region),
+  // jump seamlessly back to the real middle region.
+  const handleScroll = useCallback(() => {
+    if (!sliderRef.current) return
+    const maxScroll = cardWidthRef.current * fullItems.length
+    let x = sliderRef.current.scrollLeft
+    const singleSetWidth = items.length * cardWidthRef.current
+
+    // If scrolled left beyond the first block
+    if (x < singleSetWidth * 0.5) {
+      x += singleSetWidth
+      sliderRef.current.scrollLeft = x
+      setScrollLeft(x)
+    }
+    // If scrolled right beyond the second block
+    else if (x > singleSetWidth * 1.5) {
+      x -= singleSetWidth
+      sliderRef.current.scrollLeft = x
+      setScrollLeft(x)
+    }
+  }, [fullItems.length, items.length])
+
+  // We’ll run the handleScroll on normal scrolling or after a drag
   useEffect(() => {
-    if (!transitionEnabled) {
-      requestAnimationFrame(() => {
-        setTransitionEnabled(true)
-        setIsAnimating(false)
-      })
-    }
-  }, [transitionEnabled])
+    handleScroll()
+  }, [mouseTraveled, handleScroll])
 
-  // --- DRAG LOGIC ---
-
-  const handlePointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
-    if (isAnimating) return
-    e.currentTarget.setPointerCapture(e.pointerId)
-    setIsDragging(true)
-    setDragStartX(e.clientX)
-    setDragOffsetX(0)
-    setTransitionEnabled(false) // Disable transitions for direct movement
+  const handleMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (!sliderRef.current) return
+    setIsDown(true)
+    const offsetLeft = sliderRef.current.offsetLeft
+    setStartX(e.pageX - offsetLeft)
+    setScrollLeft(sliderRef.current.scrollLeft)
+    setMouseTraveled(0)
   }
 
-  const handlePointerMove = (e: React.PointerEvent<HTMLDivElement>) => {
-    if (!isDragging || dragStartX === null) return
-    e.preventDefault() // Prevent text selection on desktop
-    const offset = e.clientX - dragStartX
-    setDragOffsetX(offset)
+  const handleTouchStart = (e: React.TouchEvent<HTMLDivElement>) => {
+    if (!sliderRef.current) return
+    const touch = e.touches[0]
+    if (!touch) return
+    setIsDown(true)
+    const offsetLeft = sliderRef.current.offsetLeft
+    setStartX(touch.pageX - offsetLeft)
+    setScrollLeft(sliderRef.current.scrollLeft)
+    setMouseTraveled(0)
   }
 
-  const handlePointerUp = (e: React.PointerEvent<HTMLDivElement>) => {
-    if (!isDragging || dragStartX === null) return
-    e.currentTarget.releasePointerCapture(e.pointerId)
-    setIsDragging(false)
-
-    // Calculate how many cards we should shift
-    const shift = -Math.round(dragOffsetX / cardWidth)
-    /*
-      Positive dragOffsetX => user pulled the carousel to the right => we need to go "previous".
-      Negative dragOffsetX => user pulled to the left => we need to go "next".
-      We invert it with '-' to match the direction in currentIndex.
-    */
-
-    setDragStartX(null)
-    setDragOffsetX(0)
-
-    // Snap if needed
-    if (shift !== 0) {
-      setIsAnimating(true)
-      setTransitionEnabled(true) // Re-enable transition for the snap
-      setCurrentIndex((prev) => prev + shift)
-    } else {
-      // If shift is 0, just snap back to current card with transition off -> on
-      setTransitionEnabled(true)
-    }
+  const handleTouchMove = (e: React.TouchEvent<HTMLDivElement>) => {
+    if (!isDown || startX === null) return
+    const touch = e.touches[0]
+    if (!touch) return
+    const offsetLeft = sliderRef.current?.offsetLeft ?? 0
+    const currentMouseX = touch.pageX - offsetLeft
+    setMouseTraveled(currentMouseX - startX)
   }
 
-  // Calculate the final translateX, including drag offset
-  const translateX = -(currentIndex * cardWidth) + dragOffsetX
+  const endDrag = () => {
+    setIsDown(false)
+    setStartX(null)
+    // Snap alignment via CSS or manual logic
+    // If you need a manual snap after drag:
+    //   find the nearest item index => scroll to item boundary
+  }
+
+  // Move by 1 card with button clicks
+  const scrollByOne = (dir: 'left' | 'right') => {
+    if (!sliderRef.current) return
+    const newScroll =
+      dir === 'left'
+        ? sliderRef.current.scrollLeft - cardWidthRef.current
+        : sliderRef.current.scrollLeft + cardWidthRef.current
+
+    sliderRef.current.scrollTo({ left: newScroll, behavior: 'smooth' })
+    setScrollLeft(newScroll)
+  }
 
   return (
-    <div className="relative mx-auto w-full overflow-hidden">
-      {/* Carousel Track */}
+    <div className="relative mx-auto w-full p-4">
+      <h2 className="mb-4 text-xl font-semibold">Infinite Carousel</h2>
+
+      {/* Slider */}
       <div
-        ref={trackRef}
-        // Use grab/grabbing cursor for a better drag UX
-        className={`flex cursor-pointer`}
-        style={{
-          transition: transitionEnabled ? 'transform 0.3s' : 'none',
-          transform: `translateX(${translateX}px)`,
-          width: `${extendedItems.length * cardWidth}px`
+        ref={sliderRef}
+        className={`scroll-snap-type-x-mandatory relative flex select-none overflow-y-hidden overflow-x-scroll border bg-gray-200 ${isDown ? 'cursor-grabbing' : 'cursor-grab'} `}
+        // Drag events
+        onMouseDown={handleMouseDown}
+        onMouseLeave={() => {
+          if (isDown) endDrag()
         }}
-        onPointerDown={handlePointerDown}
-        onPointerMove={handlePointerMove}
-        onPointerUp={handlePointerUp}
+        onMouseMove={(e) => e.preventDefault()} // prevent text selection
+        onMouseUp={endDrag}
+        onTouchStart={handleTouchStart}
+        onTouchMove={handleTouchMove}
+        onTouchEnd={endDrag}
+        onTouchCancel={endDrag}
+        // If you want auto-snap after normal scrolling:
+        onScroll={handleScroll}
+        style={{
+          whiteSpace: 'nowrap'
+        }}
       >
-        {extendedItems.map((item, index) => (
+        {fullItems.map((item, index) => (
           <div
-            key={index}
-            className="flex-shrink-0"
+            key={`${item.id}-${index}`}
+            className={`carousel-card scroll-snap-align-start relative inline-block h-[300px] w-[300px] flex-shrink-0 border-2 border-red-400 bg-black text-white`}
             style={{
-              width: `${cardWidth}px`,
-              height: '300px',
               backgroundImage: `url(${item.imageUrl})`,
               backgroundSize: 'cover',
               backgroundPosition: 'center'
             }}
-          />
+          >
+            <div className="bg-black/50 p-2">ID: {item.id}</div>
+          </div>
         ))}
       </div>
 
-      {/* Navigation Buttons (centered below) */}
-      <div className="mt-4 flex justify-center gap-4">
+      {/* Buttons */}
+      <div className="mt-4 flex items-center gap-2">
         <button
-          onClick={handlePrev}
-          disabled={isAnimating}
-          className="rounded bg-gray-700 px-3 py-1 text-white"
+          onClick={() => scrollByOne('left')}
+          className="rounded bg-blue-500 px-4 py-2 text-white"
         >
           Prev
         </button>
         <button
-          onClick={handleNext}
-          disabled={isAnimating}
-          className="rounded bg-gray-700 px-3 py-1 text-white"
+          onClick={() => scrollByOne('right')}
+          className="rounded bg-blue-500 px-4 py-2 text-white"
         >
           Next
         </button>
