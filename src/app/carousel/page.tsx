@@ -1,4 +1,5 @@
 import { Carousel } from '@/components'
+import { Carousel2 } from '@/components/Carousel2'
 
 export default function CarouselPage() {
   const items = [
@@ -39,7 +40,7 @@ export default function CarouselPage() {
 
       <div className="mb-6">
         <h2 className="mb-2">Default</h2>
-        <Carousel items={items} />
+        <Carousel2 />
       </div>
     </main>
   )
