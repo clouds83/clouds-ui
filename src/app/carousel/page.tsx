@@ -1,6 +1,6 @@
 import { Carousel } from '@/components'
 
-export default function InputPage() {
+export default function CarouselPage() {
   const items = [
     {
       id: 1,
