@@ -13,89 +13,137 @@ interface InteractiveCarouselProps {
 
 export function Carousel({ items }: InteractiveCarouselProps) {
   const totalItems = items.length
-  const extendedItems = [...items, ...items, ...items] // Clonando os itens antes e depois
-  const [currentIndex, setCurrentIndex] = useState(totalItems) // Iniciando no meio
+  const extendedItems = [...items, ...items, ...items] // Clones before and after
+  const [currentIndex, setCurrentIndex] = useState(totalItems) // Start in the middle
   const [isAnimating, setIsAnimating] = useState(false)
   const [transitionEnabled, setTransitionEnabled] = useState(true)
-  const trackRef = useRef<HTMLDivElement>(null)
 
-  // Função para avançar para o próximo item
+  // Drag states
+  const [isDragging, setIsDragging] = useState(false)
+  const [dragStartX, setDragStartX] = useState<number | null>(null)
+  const [dragOffsetX, setDragOffsetX] = useState(0)
+
+  const trackRef = useRef<HTMLDivElement>(null)
+  const cardWidth = 300
+
+  // Handle click on next button
   const handleNext = () => {
-    if (isAnimating) return // Ignora cliques se uma animação estiver em andamento
+    if (isAnimating) return
     setIsAnimating(true)
     setCurrentIndex((prev) => prev + 1)
   }
 
-  // Função para voltar para o item anterior
+  // Handle click on previous button
   const handlePrev = () => {
-    if (isAnimating) return // Ignora cliques se uma animação estiver em andamento
+    if (isAnimating) return
     setIsAnimating(true)
     setCurrentIndex((prev) => prev - 1)
   }
 
-  // Lida com o fim da transição (animação)
+  // Handle transition end to "teleport" when leaving the middle range
   const handleTransitionEnd = () => {
-    // Verifica se precisamos teleportar para manter o loop infinito
     if (currentIndex >= totalItems * 2) {
-      // Teleporta de volta para o meio
       setTransitionEnabled(false)
       setCurrentIndex(currentIndex - totalItems)
     } else if (currentIndex < totalItems) {
-      // Teleporta para a frente
       setTransitionEnabled(false)
       setCurrentIndex(currentIndex + totalItems)
     } else {
-      // Se não precisar teleportar, a animação terminou normalmente
       setIsAnimating(false)
     }
   }
 
-  // Adiciona o listener para o evento de fim da transição
+  // Listen for transition end
   useEffect(() => {
     const el = trackRef.current
-    if (el) {
-      el.addEventListener('transitionend', handleTransitionEnd)
-    }
+    if (!el) return
 
+    el.addEventListener('transitionend', handleTransitionEnd)
     return () => {
-      if (el) {
-        el.removeEventListener('transitionend', handleTransitionEnd)
-      }
+      el.removeEventListener('transitionend', handleTransitionEnd)
     }
   }, [currentIndex, totalItems])
 
-  // Reabilita a transição após o teleport
+  // Re-enable transition after teleporting
   useEffect(() => {
     if (!transitionEnabled) {
-      // Utiliza requestAnimationFrame para garantir que as mudanças de estilo sejam aplicadas na ordem correta
-      const reenableTransition = () => {
-        requestAnimationFrame(() => {
-          setTransitionEnabled(true)
-          setIsAnimating(false)
-        })
-      }
-      reenableTransition()
+      requestAnimationFrame(() => {
+        setTransitionEnabled(true)
+        setIsAnimating(false)
+      })
     }
   }, [transitionEnabled])
 
+  // --- DRAG LOGIC ---
+
+  const handlePointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
+    if (isAnimating) return
+    e.currentTarget.setPointerCapture(e.pointerId)
+    setIsDragging(true)
+    setDragStartX(e.clientX)
+    setDragOffsetX(0)
+    setTransitionEnabled(false) // Disable transitions for direct movement
+  }
+
+  const handlePointerMove = (e: React.PointerEvent<HTMLDivElement>) => {
+    if (!isDragging || dragStartX === null) return
+    e.preventDefault() // Prevent text selection on desktop
+    const offset = e.clientX - dragStartX
+    setDragOffsetX(offset)
+  }
+
+  const handlePointerUp = (e: React.PointerEvent<HTMLDivElement>) => {
+    if (!isDragging || dragStartX === null) return
+    e.currentTarget.releasePointerCapture(e.pointerId)
+    setIsDragging(false)
+
+    // Calculate how many cards we should shift
+    const shift = -Math.round(dragOffsetX / cardWidth)
+    /*
+      Positive dragOffsetX => user pulled the carousel to the right => we need to go "previous".
+      Negative dragOffsetX => user pulled to the left => we need to go "next".
+      We invert it with '-' to match the direction in currentIndex.
+    */
+
+    setDragStartX(null)
+    setDragOffsetX(0)
+
+    // Snap if needed
+    if (shift !== 0) {
+      setIsAnimating(true)
+      setTransitionEnabled(true) // Re-enable transition for the snap
+      setCurrentIndex((prev) => prev + shift)
+    } else {
+      // If shift is 0, just snap back to current card with transition off -> on
+      setTransitionEnabled(true)
+    }
+  }
+
+  // Calculate the final translateX, including drag offset
+  const translateX = -(currentIndex * cardWidth) + dragOffsetX
+
   return (
     <div className="relative mx-auto w-full overflow-hidden">
-      {/* Pista do Carrossel */}
+      {/* Carousel Track */}
       <div
         ref={trackRef}
-        className="flex"
+        // Use grab/grabbing cursor for a better drag UX
+        className={`flex ${isDragging ? 'cursor-pointer' : 'cursor-pointer'}`}
         style={{
           transition: transitionEnabled ? 'transform 0.3s' : 'none',
-          transform: `translateX(-${currentIndex * 300}px)`,
-          width: `${extendedItems.length * 300}px`
+          transform: `translateX(${translateX}px)`,
+          width: `${extendedItems.length * cardWidth}px`
         }}
+        onPointerDown={handlePointerDown}
+        onPointerMove={handlePointerMove}
+        onPointerUp={handlePointerUp}
       >
         {extendedItems.map((item, index) => (
           <div
             key={index}
             className="flex-shrink-0"
             style={{
-              width: '300px',
+              width: `${cardWidth}px`,
               height: '300px',
               backgroundImage: `url(${item.imageUrl})`,
               backgroundSize: 'cover',
@@ -105,21 +153,23 @@ export function Carousel({ items }: InteractiveCarouselProps) {
         ))}
       </div>
 
-      {/* Botões de Navegação */}
-      <button
-        className="absolute left-4 top-1/2 -translate-y-1/2 transform rounded bg-gray-700 px-3 py-1 text-white"
-        onClick={handlePrev}
-        disabled={isAnimating}
-      >
-        Prev
-      </button>
-      <button
-        className="absolute right-4 top-1/2 -translate-y-1/2 transform rounded bg-gray-700 px-3 py-1 text-white"
-        onClick={handleNext}
-        disabled={isAnimating}
-      >
-        Next
-      </button>
+      {/* Navigation Buttons (centered below) */}
+      <div className="mt-4 flex justify-center gap-4">
+        <button
+          onClick={handlePrev}
+          disabled={isAnimating}
+          className="rounded bg-gray-700 px-3 py-1 text-white"
+        >
+          Prev
+        </button>
+        <button
+          onClick={handleNext}
+          disabled={isAnimating}
+          className="rounded bg-gray-700 px-3 py-1 text-white"
+        >
+          Next
+        </button>
+      </div>
     </div>
   )
 }
