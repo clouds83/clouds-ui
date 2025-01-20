@@ -40,7 +40,7 @@ export default function CarouselPage() {
 
       <div className="mb-6">
         <h2 className="mb-2">Default</h2>
-        <Carousel2 />
+        <Carousel />
       </div>
     </main>
   )
